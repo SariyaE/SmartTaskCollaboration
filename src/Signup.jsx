@@ -29,8 +29,8 @@ export default function Signup({ setUser }) {
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
 
-    setUser(newUser);
-    toast.success("Account created!");
+    setUser({ username, email, role: "member" });
+    toast.success("Account created successfully!");
     navigate("/projects");
   };
 
@@ -41,12 +41,27 @@ export default function Signup({ setUser }) {
         background: "#222",
         color: "white",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         padding: 20,
       }}
     >
       <ToastContainer position="top-right" autoClose={2500} />
+
+      {/* 🌈 TITLE ABOVE THE BOX */}
+      <h1
+        style={{
+          marginBottom: 20,
+          fontSize: "2rem",
+          background: "linear-gradient(90deg, #00c6ff, #ff6ec4)",
+          WebkitBackgroundClip: "text",
+          color: "transparent",
+          fontWeight: "bold",
+        }}
+      >
+        Smart Task Tool
+      </h1>
 
       <form
         onSubmit={handleSignup}
@@ -121,25 +136,3 @@ export default function Signup({ setUser }) {
     </div>
   );
 }
-🟧 3. Update your routes in App.jsx
-Make sure App.jsx looks like this:
-
-jsx
-Copy code
-import Login from "./Login.jsx";
-import Signup from "./Signup.jsx";
-import ProjectSelection from "./ProjectSelection.jsx";
-import Board from "./components/Board.jsx";
-
-function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/projects" element={<ProjectSelection />} />
-      <Route path="/project/:id" element={<Board />} />
-    </Routes>
-  );
-}
-
-export default App;
