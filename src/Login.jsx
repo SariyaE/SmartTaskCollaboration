@@ -1,7 +1,6 @@
 // Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
 
 export default function Login({ setUser }) {
   const [username, setUsername] = useState("");
@@ -14,17 +13,16 @@ export default function Login({ setUser }) {
     const usersRaw = localStorage.getItem("users");
     const users = usersRaw ? JSON.parse(usersRaw) : [];
 
-    const found = users.find(
+    const foundUser = users.find(
       (u) => u.username === username && u.password === password
     );
 
-    if (!found) {
-      toast.error("Invalid username or password");
+    if (!foundUser) {
+      alert("Invalid username or password");
       return;
     }
 
-    setUser({ username: found.username, email: found.email, role: "member" });
-    toast.success("Login successful!");
+    setUser(foundUser);
     navigate("/projects");
   };
 
@@ -41,14 +39,12 @@ export default function Login({ setUser }) {
         padding: 20,
       }}
     >
-      <ToastContainer position="top-right" autoClose={2500} />
-
-      {/* 🌈 TITLE ABOVE THE BOX */}
+      {/* TITLE OUTSIDE AND ABOVE THE BOX */}
       <h1
         style={{
-          marginBottom: 20,
-          fontSize: "2rem",
-          background: "linear-gradient(90deg, #00c6ff, #ff6ec4)",
+          marginBottom: 30,
+          fontSize: "2.2rem",
+          background: "linear-gradient(to right, #00d4ff, #7a5cff)",
           WebkitBackgroundClip: "text",
           color: "transparent",
           fontWeight: "bold",
@@ -57,33 +53,45 @@ export default function Login({ setUser }) {
         Smart Task Tool
       </h1>
 
+      {/* LOGIN BOX */}
       <form
         onSubmit={handleLogin}
         style={{
           width: 360,
           background: "#333",
           padding: 20,
-          borderRadius: 8,
+          borderRadius: 10,
+          boxShadow: "0px 4px 15px rgba(0,0,0,0.4)",
         }}
       >
         <h2 style={{ marginTop: 0 }}>Login</h2>
 
-        <label style={{ display: "block", marginBottom: 8 }}>
+        <label>
           Username
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{ width: "100%", padding: 8, marginTop: 6 }}
+            style={{
+              width: "100%",
+              padding: 8,
+              marginTop: 6,
+              marginBottom: 10,
+            }}
           />
         </label>
 
-        <label style={{ display: "block", marginBottom: 8 }}>
+        <label>
           Password
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: 8, marginTop: 6 }}
+            style={{
+              width: "100%",
+              padding: 8,
+              marginTop: 6,
+              marginBottom: 10,
+            }}
           />
         </label>
 
@@ -99,7 +107,7 @@ export default function Login({ setUser }) {
             marginTop: 10,
           }}
         >
-          Login
+          Log In
         </button>
 
         <div style={{ marginTop: 12 }}>
