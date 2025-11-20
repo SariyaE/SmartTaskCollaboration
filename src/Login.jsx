@@ -11,20 +11,25 @@ export default function Login({ setUser }) {
   const handleLogin = (e) => {
     e.preventDefault();
 
+    if (!username.trim() || !password.trim()) {
+      toast.error("All fields are required");
+      return;
+    }
+
     const usersRaw = localStorage.getItem("users");
     const users = usersRaw ? JSON.parse(usersRaw) : [];
 
-    const user = users.find(
+    const match = users.find(
       (u) => u.username === username && u.password === password
     );
 
-    if (!user) {
+    if (!match) {
       toast.error("Invalid username or password");
       return;
     }
 
-    setUser(user);
-    toast.success("Logged in!");
+    setUser({ username: match.username, email: match.email, role: "member" });
+    toast.success("Login successful!");
     navigate("/projects");
   };
 
@@ -35,12 +40,27 @@ export default function Login({ setUser }) {
         background: "#222",
         color: "white",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         padding: 20,
       }}
     >
-      <ToastContainer position="top-right" autoClose={2000} />
+      <ToastContainer position="top-right" autoClose={2500} />
+
+      {/* 🌈 TITLE ABOVE THE LOGIN BOX */}
+      <h1
+        style={{
+          marginBottom: 20,
+          fontSize: "2rem",
+          background: "linear-gradient(90deg, #00c6ff, #ff6ec4)",
+          WebkitBackgroundClip: "text",
+          color: "transparent",
+          fontWeight: "bold",
+        }}
+      >
+        Smart Task Tool
+      </h1>
 
       <form
         onSubmit={handleLogin}
@@ -51,11 +71,7 @@ export default function Login({ setUser }) {
           borderRadius: 8,
         }}
       >
-        <h1 style={{ textAlign: "center", marginBottom: 20 }}>
-          Smart Task Tool
-        </h1>
-
-        <h2 style={{ marginTop: 0 }}>Login</h2>
+        <h2 style={{ marginTop: 0 }}>Log In</h2>
 
         <label style={{ display: "block", marginBottom: 8 }}>
           Username
@@ -85,7 +101,7 @@ export default function Login({ setUser }) {
             border: "none",
             borderRadius: 6,
             cursor: "pointer",
-            marginTop: 12,
+            marginTop: 10,
           }}
         >
           Log In
@@ -102,7 +118,7 @@ export default function Login({ setUser }) {
               cursor: "pointer",
             }}
           >
-            Don't have an account? Sign up
+            Need an account? Create one
           </button>
         </div>
       </form>
