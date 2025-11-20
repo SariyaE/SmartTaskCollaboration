@@ -11,24 +11,19 @@ export default function Login({ setUser }) {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (!username.trim() || !password.trim()) {
-      toast.error("All fields are required");
-      return;
-    }
-
     const usersRaw = localStorage.getItem("users");
     const users = usersRaw ? JSON.parse(usersRaw) : [];
 
-    const match = users.find(
+    const found = users.find(
       (u) => u.username === username && u.password === password
     );
 
-    if (!match) {
+    if (!found) {
       toast.error("Invalid username or password");
       return;
     }
 
-    setUser({ username: match.username, email: match.email, role: "member" });
+    setUser({ username: found.username, email: found.email, role: "member" });
     toast.success("Login successful!");
     navigate("/projects");
   };
@@ -48,7 +43,7 @@ export default function Login({ setUser }) {
     >
       <ToastContainer position="top-right" autoClose={2500} />
 
-      {/* 🌈 TITLE ABOVE THE LOGIN BOX */}
+      {/* 🌈 TITLE ABOVE THE BOX */}
       <h1
         style={{
           marginBottom: 20,
@@ -71,7 +66,7 @@ export default function Login({ setUser }) {
           borderRadius: 8,
         }}
       >
-        <h2 style={{ marginTop: 0 }}>Log In</h2>
+        <h2 style={{ marginTop: 0 }}>Login</h2>
 
         <label style={{ display: "block", marginBottom: 8 }}>
           Username
@@ -104,7 +99,7 @@ export default function Login({ setUser }) {
             marginTop: 10,
           }}
         >
-          Log In
+          Login
         </button>
 
         <div style={{ marginTop: 12 }}>
@@ -118,7 +113,7 @@ export default function Login({ setUser }) {
               cursor: "pointer",
             }}
           >
-            Need an account? Create one
+            Don't have an account? Sign up
           </button>
         </div>
       </form>
