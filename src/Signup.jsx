@@ -3,49 +3,36 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-
 export default function Signup({ setUser }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-
   const handleSignup = (e) => {
     e.preventDefault();
 
-
-    // basic validation
     if (!username.trim() || !email.trim() || !password.trim()) {
       toast.error("All fields are required");
       return;
     }
 
-
-    // get existing users from localStorage
     const usersRaw = localStorage.getItem("users");
     const users = usersRaw ? JSON.parse(usersRaw) : [];
 
-
-    // check if username already exists
     if (users.some((u) => u.username === username)) {
       toast.error("Username already exists");
       return;
     }
 
-
-    // create new user
     const newUser = { username, email, password };
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
 
-
-    // auto-login after signup
-    setUser({ username, email, role: "member" });
-    toast.success("Account created successfully!");
+    setUser(newUser);
+    toast.success("Account created!");
     navigate("/projects");
   };
-
 
   return (
     <div
@@ -60,6 +47,7 @@ export default function Signup({ setUser }) {
       }}
     >
       <ToastContainer position="top-right" autoClose={2500} />
+
       <form
         onSubmit={handleSignup}
         style={{
@@ -71,7 +59,6 @@ export default function Signup({ setUser }) {
       >
         <h2 style={{ marginTop: 0 }}>Create Account</h2>
 
-
         <label style={{ display: "block", marginBottom: 8 }}>
           Username
           <input
@@ -80,7 +67,6 @@ export default function Signup({ setUser }) {
             style={{ width: "100%", padding: 8, marginTop: 6 }}
           />
         </label>
-
 
         <label style={{ display: "block", marginBottom: 8 }}>
           Email
@@ -92,7 +78,6 @@ export default function Signup({ setUser }) {
           />
         </label>
 
-
         <label style={{ display: "block", marginBottom: 8 }}>
           Password
           <input
@@ -102,7 +87,6 @@ export default function Signup({ setUser }) {
             style={{ width: "100%", padding: 8, marginTop: 6 }}
           />
         </label>
-
 
         <button
           type="submit"
@@ -118,7 +102,6 @@ export default function Signup({ setUser }) {
         >
           Sign Up
         </button>
-
 
         <div style={{ marginTop: 12 }}>
           <button
@@ -138,3 +121,25 @@ export default function Signup({ setUser }) {
     </div>
   );
 }
+🟧 3. Update your routes in App.jsx
+Make sure App.jsx looks like this:
+
+jsx
+Copy code
+import Login from "./Login.jsx";
+import Signup from "./Signup.jsx";
+import ProjectSelection from "./ProjectSelection.jsx";
+import Board from "./components/Board.jsx";
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/projects" element={<ProjectSelection />} />
+      <Route path="/project/:id" element={<Board />} />
+    </Routes>
+  );
+}
+
+export default App;
