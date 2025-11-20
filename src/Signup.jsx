@@ -1,37 +1,31 @@
 // Signup.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
 
-export default function Signup({ setUser }) {
+export default function Signup() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSignup = (e) => {
     e.preventDefault();
 
-    if (!username.trim() || !email.trim() || !password.trim()) {
-      toast.error("All fields are required");
-      return;
-    }
-
     const usersRaw = localStorage.getItem("users");
     const users = usersRaw ? JSON.parse(usersRaw) : [];
 
-    if (users.some((u) => u.username === username)) {
-      toast.error("Username already exists");
+    const usernameTaken = users.some((u) => u.username === username);
+
+    if (usernameTaken) {
+      alert("Username already exists. Try another one.");
       return;
     }
 
-    const newUser = { username, email, password };
+    const newUser = { username, password };
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
 
-    setUser({ username, email, role: "member" });
-    toast.success("Account created successfully!");
-    navigate("/projects");
+    alert("Account created successfully!");
+    navigate("/");
   };
 
   return (
@@ -47,14 +41,12 @@ export default function Signup({ setUser }) {
         padding: 20,
       }}
     >
-      <ToastContainer position="top-right" autoClose={2500} />
-
-      {/* 🌈 TITLE ABOVE THE BOX */}
+      {/* TITLE ABOVE THE BOX */}
       <h1
         style={{
-          marginBottom: 20,
-          fontSize: "2rem",
-          background: "linear-gradient(90deg, #00c6ff, #ff6ec4)",
+          marginBottom: 30,
+          fontSize: "2.2rem",
+          background: "linear-gradient(to right, #00d4ff, #7a5cff)",
           WebkitBackgroundClip: "text",
           color: "transparent",
           fontWeight: "bold",
@@ -63,43 +55,45 @@ export default function Signup({ setUser }) {
         Smart Task Tool
       </h1>
 
+      {/* SIGNUP BOX */}
       <form
         onSubmit={handleSignup}
         style={{
           width: 360,
           background: "#333",
           padding: 20,
-          borderRadius: 8,
+          borderRadius: 10,
+          boxShadow: "0px 4px 15px rgba(0,0,0,0.4)",
         }}
       >
         <h2 style={{ marginTop: 0 }}>Create Account</h2>
 
-        <label style={{ display: "block", marginBottom: 8 }}>
+        <label>
           Username
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{ width: "100%", padding: 8, marginTop: 6 }}
+            style={{
+              width: "100%",
+              padding: 8,
+              marginTop: 6,
+              marginBottom: 10,
+            }}
           />
         </label>
 
-        <label style={{ display: "block", marginBottom: 8 }}>
-          Email
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: 8, marginTop: 6 }}
-          />
-        </label>
-
-        <label style={{ display: "block", marginBottom: 8 }}>
+        <label>
           Password
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: 8, marginTop: 6 }}
+            style={{
+              width: "100%",
+              padding: 8,
+              marginTop: 6,
+              marginBottom: 10,
+            }}
           />
         </label>
 
