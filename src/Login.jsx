@@ -1,51 +1,32 @@
-// Signup.jsx
+// Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-
-export default function Signup({ setUser }) {
+export default function Login({ setUser }) {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-
-  const handleSignup = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
 
-
-    // basic validation
-    if (!username.trim() || !email.trim() || !password.trim()) {
-      toast.error("All fields are required");
-      return;
-    }
-
-
-    // get existing users from localStorage
     const usersRaw = localStorage.getItem("users");
     const users = usersRaw ? JSON.parse(usersRaw) : [];
 
+    const user = users.find(
+      (u) => u.username === username && u.password === password
+    );
 
-    // check if username already exists
-    if (users.some((u) => u.username === username)) {
-      toast.error("Username already exists");
+    if (!user) {
+      toast.error("Invalid username or password");
       return;
     }
 
-
-    // create new user
-    const newUser = { username, email, password };
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
-
-
-    // auto-login after signup
-    setUser({ username, email, role: "member" });
-    toast.success("Account created successfully!");
+    setUser(user);
+    toast.success("Logged in!");
     navigate("/projects");
   };
-
 
   return (
     <div
@@ -59,9 +40,10 @@ export default function Signup({ setUser }) {
         padding: 20,
       }}
     >
-      <ToastContainer position="top-right" autoClose={2500} />
+      <ToastContainer position="top-right" autoClose={2000} />
+
       <form
-        onSubmit={handleSignup}
+        onSubmit={handleLogin}
         style={{
           width: 360,
           background: "#333",
@@ -69,8 +51,11 @@ export default function Signup({ setUser }) {
           borderRadius: 8,
         }}
       >
-        <h2 style={{ marginTop: 0 }}>Create Account</h2>
+        <h1 style={{ textAlign: "center", marginBottom: 20 }}>
+          Smart Task Tool
+        </h1>
 
+        <h2 style={{ marginTop: 0 }}>Login</h2>
 
         <label style={{ display: "block", marginBottom: 8 }}>
           Username
@@ -80,18 +65,6 @@ export default function Signup({ setUser }) {
             style={{ width: "100%", padding: 8, marginTop: 6 }}
           />
         </label>
-
-
-        <label style={{ display: "block", marginBottom: 8 }}>
-          Email
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: 8, marginTop: 6 }}
-          />
-        </label>
-
 
         <label style={{ display: "block", marginBottom: 8 }}>
           Password
@@ -103,7 +76,6 @@ export default function Signup({ setUser }) {
           />
         </label>
 
-
         <button
           type="submit"
           style={{
@@ -113,17 +85,16 @@ export default function Signup({ setUser }) {
             border: "none",
             borderRadius: 6,
             cursor: "pointer",
-            marginTop: 10,
+            marginTop: 12,
           }}
         >
-          Sign Up
+          Log In
         </button>
-
 
         <div style={{ marginTop: 12 }}>
           <button
             type="button"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/signup")}
             style={{
               background: "transparent",
               color: "#0af",
@@ -131,11 +102,10 @@ export default function Signup({ setUser }) {
               cursor: "pointer",
             }}
           >
-            Already have an account? Log in
+            Don't have an account? Sign up
           </button>
         </div>
       </form>
     </div>
   );
 }
-
