@@ -53,7 +53,7 @@ export default function ProjectSelection({ user }) {
   };
 
   const renameProject = (id) => {
-    const newName = prompt("Enter new project name:");
+    const newName = prompt("Edit project name:");
     if (!newName) return;
     const updated = projects.map((p) =>
       p.id === id ? { ...p, name: newName } : p
@@ -169,4 +169,5 @@ export default function ProjectSelection({ user }) {
       </div>
     </div>
   );
+
 }
