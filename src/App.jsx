@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
-import ProjectSelection from "./components/ProjectSelection";
+import ProjectSelection from "./ProjectSelection";
 import Board from "./components/Board";
 
 // Simple helper: read user from localStorage on load
@@ -50,3 +50,4 @@ export default function App() {
     </Router>
   );
 }
+
