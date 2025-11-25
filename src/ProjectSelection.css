@@ -1,0 +1,107 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #111;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+/* Top Container */
+.project-container {
+  text-align: center;
+  padding-top: 40px;
+}
+
+/* Logout Button */
+.logout-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background-color: #1e90ff;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Title Gradient */
+.title {
+  font-size: 48px;
+  font-weight: bold;
+  background: linear-gradient(to right, #4da0ff, #6a5acd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.welcome {
+  font-size: 32px;
+  margin-top: 10px;
+}
+
+.select-text {
+  margin-top: 25px;
+  font-size: 28px;
+}
+
+/* Card Grid */
+.project-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+/* Individual Cards */
+.project-card {
+  background-color: #1c1c1c;
+  width: 260px;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+.project-card h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Buttons Row */
+.btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* Button Styles */
+.btn-open {
+  background-color: #1e90ff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-edit {
+  background-color: #ffa500;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: black;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-delete {
+  background-color: #ff4040;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
