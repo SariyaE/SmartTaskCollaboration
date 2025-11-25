@@ -9,7 +9,21 @@ export default function Login({ setUser }) {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Login clicked");
+
+    // --- TEMPORARY MOCK LOGIN (no backend needed) ---
+    if (!username.trim() || !password.trim()) {
+      alert("Please enter a username and password.");
+      return;
+    }
+
+    // You will remove this once backend connects
+    const mockUser = {
+      username: username,
+      role: "user",
+    };
+
+    setUser(mockUser);
+    navigate("/projects"); // move to projects page
   };
 
   return (
