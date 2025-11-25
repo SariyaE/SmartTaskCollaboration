@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles/ProjectSelection.css";
+import "../styles/ProjectSelection.css";
 
 const ProjectSelection = ({ username }) => {
   // Mock project list (matches your screenshot)
@@ -47,4 +47,5 @@ const ProjectSelection = ({ username }) => {
 };
 
 export default ProjectSelection;
+
 
