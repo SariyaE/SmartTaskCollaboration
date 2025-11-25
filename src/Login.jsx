@@ -1,46 +1,44 @@
 import React, { useState } from "react";
 import "./Login.css";
+import { Link } from "react-router-dom";
 
-const Login = () => {
+export default function Login({ setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    alert("Login pressed — Backend not connected yet");
+    alert("This is only UI — backend not connected yet.");
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div className="login-page">
+      <h1 className="title">SmartTask Tool</h1>
+      <p className="subtitle">Collaborate. Track. Achieve.</p>
 
-        <h1 className="login-title">Smart Task</h1>
-        <p className="login-subtitle">Organize your tasks effortlessly</p>
+      <form className="login-card" onSubmit={handleLogin}>
+        <label>Username</label>
+        <input
+          type="text"
+          placeholder="Enter your username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
-        <form className="login-form" onSubmit={handleLogin}>
-          <label>Username</label>
-          <input
-            type="text"
-            placeholder="Enter your username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+        <label>Password</label>
+        <input
+          type="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-          <label>Password</label>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <button type="submit">Log In</button>
 
-          <button type="submit" className="login-button">
-            Login
-          </button>
-        </form>
-      </div>
+        <p className="signup-text">
+          Don’t have an account? <Link to="/signup">Sign up</Link>
+        </p>
+      </form>
     </div>
   );
-};
-
-export default Login;
+}
