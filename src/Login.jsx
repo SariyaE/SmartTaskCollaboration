@@ -1,73 +1,82 @@
 // Login.jsx
+import "./Login.css";    
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css";
 
 export default function Login({ setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const usersRaw = localStorage.getItem("users");
-    const users = usersRaw ? JSON.parse(usersRaw) : [];
+    try {
+      const response = await fetch(
+        "https://kanban-app-casf.onrender.com/api/login/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username,
+            password
+          })
+        }
+      );
 
-    const foundUser = users.find(
-      (u) => u.username === username && u.password === password
-    );
+      if (!response.ok) {
+        const err = await response.json();
+        alert(err.detail || "Login failed.");
+        return;
+      }
 
-    if (!foundUser) {
-      alert("Invalid username or password");
-      return;
+      const data = await response.json();
+
+      // Save token + user to localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Update state so the app knows the user is logged in
+      setUser(data.user);
+
+      navigate("/projects");
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Something went wrong connecting to the server.");
     }
-
-    setUser(foundUser);
-    navigate("/projects");
   };
 
   return (
-    <div className="login-page">
-      {/* Title ABOVE the card */}
-      <h1 className="login-title">SmartTask</h1>
-      <p className="login-subtitle">Welcome back — log in to continue</p>
+    <div className="login-container">
+      <h1 className="app-title">Smart Task Tool</h1>
 
-      {/* White login card */}
-      <form className="login-card" onSubmit={handleLogin}>
-        <h2 className="login-header">Login</h2>
+      <form className="login-box" onSubmit={handleLogin}>
+        <h2>Login</h2>
 
-        <label className="login-label">
+        <label>
           Username
           <input
-            className="login-input"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter username"
           />
         </label>
 
-        <label className="login-label">
+        <label>
           Password
           <input
             type="password"
-            className="login-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
           />
         </label>
 
-        <button className="login-button" type="submit">
-          Log In
-        </button>
+        <button type="submit">Log In</button>
 
-        <p className="signup-text">
-          Don’t have an account?{" "}
-          <span className="signup-link" onClick={() => navigate("/signup")}>
-            Sign up
-          </span>
-        </p>
+        <div className="signup-link">
+          <button type="button" onClick={() => navigate("/signup")}>
+            Don’t have an account? Sign up
+          </button>
+        </div>
       </form>
     </div>
   );
