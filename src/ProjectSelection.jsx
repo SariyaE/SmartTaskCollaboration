@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import './ProjectSelection.css';
 
 /**
  * Projects are stored in localStorage under "projects" as array:
@@ -171,3 +172,4 @@ export default function ProjectSelection({ user }) {
   );
 
 }
+
