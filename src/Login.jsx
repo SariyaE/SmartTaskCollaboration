@@ -1,83 +1,46 @@
-// Login.jsx
-import "./Login.css";    
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
-export default function Login({ setUser }) {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await fetch(
-        "https://kanban-app-casf.onrender.com/api/login/",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            username,
-            password
-          })
-        }
-      );
-
-      if (!response.ok) {
-        const err = await response.json();
-        alert(err.detail || "Login failed.");
-        return;
-      }
-
-      const data = await response.json();
-
-      // Save token + user to localStorage
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      // Update state so the app knows the user is logged in
-      setUser(data.user);
-
-      navigate("/projects");
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Something went wrong connecting to the server.");
-    }
+    alert("Login pressed — Backend not connected yet");
   };
 
   return (
     <div className="login-container">
-      <h1 className="app-title">Smart Task Tool</h1>
+      <div className="login-card">
 
-      <form className="login-box" onSubmit={handleLogin}>
-        <h2>Login</h2>
+        <h1 className="login-title">Smart Task</h1>
+        <p className="login-subtitle">Organize your tasks effortlessly</p>
 
-        <label>
-          Username
+        <form className="login-form" onSubmit={handleLogin}>
+          <label>Username</label>
           <input
+            type="text"
+            placeholder="Enter your username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-        </label>
 
-        <label>
-          Password
+          <label>Password</label>
           <input
             type="password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </label>
 
-        <button type="submit">Log In</button>
-
-        <div className="signup-link">
-          <button type="button" onClick={() => navigate("/signup")}>
-            Don’t have an account? Sign up
+          <button type="submit" className="login-button">
+            Login
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
-}
+};
+
+export default Login;
