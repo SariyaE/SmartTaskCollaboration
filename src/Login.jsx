@@ -7,20 +7,20 @@ export default function Login({ setUser }) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-const handleLogin = (e) => {
-  e.preventDefault();
+  const handleLogin = (e) => {
+    e.preventDefault();
 
-  console.log("Login clicked");
+    console.log("Login clicked");
 
-  // TEMP: mock login so you can move to next page
-  const fakeUser = {
-    username: username || "testuser",
-    id: "12345"
+    // TEMP: mock login so you can move to next page
+    const fakeUser = {
+      username: username || "testuser",
+      id: "12345",
+    };
+
+    setUser(fakeUser);         // store user
+    navigate("/projects");     // go to next page
   };
-
-  setUser(fakeUser);       // store user
-  navigate("/projects");   // go to next page
-};
 
   return (
     <div className="login-page">
@@ -51,10 +51,23 @@ const handleLogin = (e) => {
         </form>
 
         <p className="signup-text">
-          Don’t have an account? <a>Sign up</a>
+          Don’t have an account?{" "}
+          <button
+            type="button"
+            onClick={() => navigate("/signup")}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "#4dafff",
+              cursor: "pointer",
+              textDecoration: "underline",
+              padding: 0,
+            }}
+          >
+            Sign up
+          </button>
         </p>
       </div>
     </div>
   );
 }
-
