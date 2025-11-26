@@ -7,18 +7,20 @@ export default function Login({ setUser }) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+const handleLogin = (e) => {
+  e.preventDefault();
 
-    // 🔥 MOCK LOGIN – lets you enter without backend
-    const fakeUser = {
-      id: 1,
-      username: username || "testuser",
-    };
+  console.log("Login clicked");
 
-    setUser(fakeUser);      // store user in App + localStorage
-    navigate("/projects");  // go to Project Selection page
+  // TEMP: mock login so you can move to next page
+  const fakeUser = {
+    username: username || "testuser",
+    id: "12345"
   };
+
+  setUser(fakeUser);       // store user
+  navigate("/projects");   // go to next page
+};
 
   return (
     <div className="login-page">
@@ -55,3 +57,4 @@ export default function Login({ setUser }) {
     </div>
   );
 }
+
