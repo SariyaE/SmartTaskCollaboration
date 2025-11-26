@@ -9,7 +9,15 @@ export default function Login({ setUser }) {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Login clicked");
+
+    // 🔥 MOCK LOGIN – lets you enter without backend
+    const fakeUser = {
+      id: 1,
+      username: username || "testuser",
+    };
+
+    setUser(fakeUser);      // store user in App + localStorage
+    navigate("/projects");  // go to Project Selection page
   };
 
   return (
