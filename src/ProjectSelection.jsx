@@ -1,118 +1,144 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "./ProjectSelection.css";
+/* ProjectSelection.css - dark purplish gradient theme, centered title and cards */
 
-function makeId() {
-  return "p-" + Math.random().toString(36).slice(2, 9);
+/* Full-page background */
+.project-page {
+  width: 100vw;
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, #392042 10%, #0f1113 70%);
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  padding: 28px 36px 60px;
+  box-sizing: border-box;
 }
 
-export default function ProjectSelection({ user }) {
-  const navigate = useNavigate();
-  const [projects, setProjects] = useState([]);
+/* Topbar: keep title visually centered but allow logout on right */
+.project-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
 
-  useEffect(() => {
-    const raw = localStorage.getItem("projects");
-    const arr = raw
-      ? JSON.parse(raw)
-      : [
-          { id: "p1", name: "Project 1", tasks: [], notifications: [] },
-          { id: "p2", name: "Project 2", tasks: [], notifications: [] },
-        ];
-    setProjects(arr);
-  }, []);
+/* Title centered visually; topbar-left used as spacer */
+.project-topbar-left { width: 120px; }
+.project-topbar-right { width: 120px; display: flex; justify-content: flex-end; }
 
-  const saveProjects = (updated) => {
-    setProjects(updated);
-    localStorage.setItem("projects", JSON.stringify(updated));
-  };
+.project-title {
+  margin: 0 auto;
+  font-size: 44px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #3ca2ff, #a066ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
 
-  const openProject = (proj) => {
-    navigate(`/board/${proj.id}`, { state: { projectId: proj.id } });
-  };
+/* Logout button */
+.logout-btn {
+  padding: 10px 16px;
+  background: #2f9cff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(50, 120, 200, 0.15);
+}
 
-  const createProject = () => {
-    const name = prompt("New project name:");
-    if (!name) return;
-    const id = makeId();
-    const newProj = { id, name, tasks: [], notifications: [] };
-    const updated = [...projects, newProj];
-    saveProjects(updated);
-  };
+/* Centered welcome + subtitle */
+.project-centered {
+  text-align: center;
+  margin-top: 18px;
+}
 
-  const deleteProject = (id) => {
-    if (!window.confirm("Delete this project?")) return;
-    const updated = projects.filter((p) => p.id !== id);
-    saveProjects(updated);
-  };
+.welcome-text {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 28px 0 6px;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
 
-  const renameProject = (id) => {
-    const newName = prompt("Edit project name:");
-    if (!newName) return;
-    const updated = projects.map((p) =>
-      p.id === id ? { ...p, name: newName } : p
-    );
-    saveProjects(updated);
-  };
+.select-text {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 6px 0 26px;
+  opacity: 0.9;
+}
 
-  return (
-    <div className="project-page">
-      <ToastContainer />
+/* Grid layout: stretch horizontally, centered, with large gaps */
+.project-grid {
+  display: flex;
+  gap: 36px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  margin-top: 8px;
+  overflow-x: auto;
+  padding: 18px 8px;
+}
 
-      {/* HEADER: title centered, logout at right */}
-      <div className="project-topbar">
-        <div className="project-topbar-left" /> {/* empty spacer */}
-        <h1 className="project-title">Smart Task Tool</h1>
-        <div className="project-topbar-right">
-          <button
-            className="logout-btn"
-            onClick={() => {
-              localStorage.removeItem("user");
-              navigate("/");
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      </div>
+/* make horizontal scrolling smooth on small screens */
+.project-grid::-webkit-scrollbar { height: 8px; }
+.project-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 8px; }
 
-      {/* WELCOME and subtitle centered */}
-      <div className="project-centered">
-        <h2 className="welcome-text">Welcome, {user?.username || "guest"}</h2>
-        <h3 className="select-text">Select a Project</h3>
-      </div>
+/* Project card styling */
+.project-card {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 28px 28px;
+  width: 320px;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.02);
+  backdrop-filter: blur(8px);
+  text-align: left;
+  min-width: 320px;
+}
 
-      {/* PROJECT CARDS */}
-      <div className="project-grid">
-        {projects.map((p) => (
-          <div key={p.id} className="project-card">
-            <h4 className="project-name">{p.name}</h4>
+/* create-card slightly taller to match screenshot feel */
+.create-card { display: flex; flex-direction: column; justify-content: space-between; }
 
-            <div className="project-buttons">
-              <button className="btn blue" onClick={() => openProject(p)}>
-                Open
-              </button>
+/* Project name */
+.project-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 18px;
+  color: #fff;
+}
 
-              <button className="btn orange" onClick={() => renameProject(p.id)}>
-                ✏️ Edit
-              </button>
+/* Buttons area */
+.project-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-              <button className="btn red" onClick={() => deleteProject(p.id)}>
-                🗑️ Delete
-              </button>
-            </div>
-          </div>
-        ))}
+/* Buttons base */
+.btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  min-width: 88px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
 
-        {/* CREATE NEW */}
-        <div className="project-card create-card">
-          <h4 className="project-name">Create New Project</h4>
+/* colors */
+.blue { background: linear-gradient(90deg,#3ca2ff,#4e74ff); }
+.orange { background: linear-gradient(90deg,#ff9f45,#ffb86b); color:#111; }
+.red { background: linear-gradient(90deg,#e04b4b,#d9534f); }
 
-          <button className="btn blue" onClick={createProject}>
-            Create
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+/* hover */
+.btn:hover { transform: translateY(-2px); transition: transform .12s ease; opacity:0.98; }
+
+/* responsiveness: stack on narrow screens */
+@media (max-width: 920px) {
+  .project-grid { flex-wrap: wrap; justify-content: center; }
+  .project-card { min-width: 280px; width: 280px; }
+  .project-title { font-size: 36px; }
+  .welcome-text { font-size: 28px; }
+  .select-text { font-size: 20px; }
 }
