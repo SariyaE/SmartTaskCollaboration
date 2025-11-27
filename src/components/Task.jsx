@@ -9,12 +9,12 @@ function Task({ task, role, deleteTask, updateTask, changeTaskStatus }) {
   return (
     <div className="bg-white text-black p-3 rounded-lg shadow mb-3">
       <h4 className="font-semibold">{task.title}</h4>
+
       <p className="text-sm text-gray-600">
         Assignee: {task.assignee || "—"} <br />
         Due: {task.due || "—"}
       </p>
 
-      {/* Only show buttons if role = owner */}
       {role === "owner" && (
         <div className="mt-2 flex gap-2">
           <button
@@ -23,12 +23,14 @@ function Task({ task, role, deleteTask, updateTask, changeTaskStatus }) {
           >
             Edit
           </button>
+
           <button
             onClick={() => deleteTask(task.id)}
             className="bg-red-500 text-white px-2 py-1 rounded text-sm"
           >
             Delete
           </button>
+
           <select
             value={task.status}
             onChange={(e) => changeTaskStatus(task.id, e.target.value)}
