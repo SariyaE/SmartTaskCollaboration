@@ -59,28 +59,28 @@ export default function ProjectSelection({ user }) {
     <div className="project-page">
       <ToastContainer />
 
-      {/* HEADER */}
-      <div className="project-header">
+      {/* HEADER: title centered, logout at right */}
+      <div className="project-topbar">
+        <div className="project-topbar-left" /> {/* empty spacer */}
         <h1 className="project-title">Smart Task Tool</h1>
-
-        <button
-          className="logout-btn"
-          onClick={() => {
-            localStorage.removeItem("user");
-            navigate("/");
-          }}
-        >
-          Logout
-        </button>
+        <div className="project-topbar-right">
+          <button
+            className="logout-btn"
+            onClick={() => {
+              localStorage.removeItem("user");
+              navigate("/");
+            }}
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
-      {/* WELCOME */}
-      <h2 className="welcome-text">
-        Welcome, {user.username}
-      </h2>
-
-      {/* SUBTITLE */}
-      <h3 className="select-text">Select a Project</h3>
+      {/* WELCOME and subtitle centered */}
+      <div className="project-centered">
+        <h2 className="welcome-text">Welcome, {user?.username || "guest"}</h2>
+        <h3 className="select-text">Select a Project</h3>
+      </div>
 
       {/* PROJECT CARDS */}
       <div className="project-grid">
@@ -105,7 +105,7 @@ export default function ProjectSelection({ user }) {
         ))}
 
         {/* CREATE NEW */}
-        <div className="project-card">
+        <div className="project-card create-card">
           <h4 className="project-name">Create New Project</h4>
 
           <button className="btn blue" onClick={createProject}>
