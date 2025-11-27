@@ -1,9 +1,11 @@
 // Signup.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Signup.css";
 
-export default function Signup({ setUser }) {
+export default function Signup() {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -14,14 +16,14 @@ export default function Signup({ setUser }) {
     const users = usersRaw ? JSON.parse(usersRaw) : [];
 
     const usernameTaken = users.some((u) => u.username === username);
-
     if (usernameTaken) {
-      alert("Username already exists. Try another one.");
+      alert("Username already exists.");
       return;
     }
 
-    const newUser = { username, password };
+    const newUser = { username, email, password };
     users.push(newUser);
+
     localStorage.setItem("users", JSON.stringify(users));
 
     alert("Account created successfully!");
@@ -29,105 +31,53 @@ export default function Signup({ setUser }) {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#222",
-        color: "white",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 20,
-      }}
-    >
-      {/* TITLE ABOVE THE BOX */}
-      <h1
-        style={{
-          marginBottom: 30,
-          fontSize: "2.2rem",
-          background: "linear-gradient(to right, #00d4ff, #7a5cff)",
-          WebkitBackgroundClip: "text",
-          color: "transparent",
-          fontWeight: "bold",
-        }}
-      >
-        Smart Task Tool
-      </h1>
+    <div className="signup-page">
 
-      {/* SIGNUP BOX */}
-      <form
-        onSubmit={handleSignup}
-        style={{
-          width: 360,
-          background: "#333",
-          padding: 20,
-          borderRadius: 10,
-          boxShadow: "0px 4px 15px rgba(0,0,0,0.4)",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>Create Account</h2>
+      <h1 className="signup-title">SmartTask Tool</h1>
+      <p className="signup-subtitle">Collaborate. Track. Achieve.</p>
 
-        <label>
-          Username
+      <div className="signup-card">
+        <h2>Create Account</h2>
+
+        <form onSubmit={handleSignup}>
+          <label>Username</label>
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{
-              width: "100%",
-              padding: 8,
-              marginTop: 6,
-              marginBottom: 10,
-            }}
+            placeholder="Enter username"
           />
-        </label>
 
-        <label>
-          Password
+          <label>Email</label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter email"
+          />
+
+          <label>Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{
-              width: "100%",
-              padding: 8,
-              marginTop: 6,
-              marginBottom: 10,
-            }}
+            placeholder="Enter password"
           />
-        </label>
 
-        <button
-          type="submit"
-          style={{
-            background: "#0af",
-            color: "white",
-            padding: "10px 14px",
-            border: "none",
-            borderRadius: 6,
-            cursor: "pointer",
-            marginTop: 10,
-          }}
-        >
-          Sign Up
-        </button>
+          <button type="submit" className="signup-btn">
+            Sign Up
+          </button>
+        </form>
 
-        <div style={{ marginTop: 12 }}>
+        <p className="login-text">
+          Already have an account?{" "}
           <button
             type="button"
             onClick={() => navigate("/")}
-            style={{
-              background: "transparent",
-              color: "#0af",
-              border: "none",
-              cursor: "pointer",
-            }}
+            className="login-link"
           >
-            Already have an account? Log in
+            Log in
           </button>
-        </div>
-      </form>
+        </p>
+      </div>
     </div>
   );
 }
-
