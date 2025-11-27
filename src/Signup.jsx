@@ -1,69 +1,77 @@
 // Signup.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Signup.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
   const handleSignup = (e) => {
     e.preventDefault();
 
-    const usersRaw = localStorage.getItem("users");
-    const users = usersRaw ? JSON.parse(usersRaw) : [];
+    // basic validation
+    if (!username.trim() || !email.trim() || !password.trim()) {
+      alert("All fields are required.");
+      return;
+    }
 
-    const usernameTaken = users.some((u) => u.username === username);
-    if (usernameTaken) {
+    // get stored users or start with empty array
+    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+
+    // check if username already taken
+    if (existingUsers.some((u) => u.username === username)) {
       alert("Username already exists.");
       return;
     }
 
+    // create new user
     const newUser = { username, email, password };
-    users.push(newUser);
+    existingUsers.push(newUser);
 
-    localStorage.setItem("users", JSON.stringify(users));
+    // save back to localStorage
+    localStorage.setItem("users", JSON.stringify(existingUsers));
 
-    alert("Account created successfully!");
-    navigate("/");
+    alert("Account created! You can now log in.");
+    navigate("/"); // go back to login page
   };
 
   return (
     <div className="signup-page">
-
-      <h1 className="signup-title">SmartTask Tool</h1>
-      <p className="signup-subtitle">Collaborate. Track. Achieve.</p>
+      <h1 className="signup-title">Create Account</h1>
+      <p className="signup-subtitle">Join SmartTask Tool</p>
 
       <div className="signup-card">
-        <h2>Create Account</h2>
-
         <form onSubmit={handleSignup}>
           <label>Username</label>
           <input
+            type="text"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter username"
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           <label>Email</label>
           <input
+            type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter email"
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <label>Password</label>
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <button type="submit" className="signup-btn">
-            Sign Up
+            Create Account
           </button>
         </form>
 
@@ -72,7 +80,14 @@ export default function Signup() {
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="login-link"
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "#4dafff",
+              cursor: "pointer",
+              textDecoration: "underline",
+              padding: 0,
+            }}
           >
             Log in
           </button>
