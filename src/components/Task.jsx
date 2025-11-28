@@ -1,46 +1,40 @@
 function Task({ task, role, deleteTask, updateTask, changeTaskStatus }) {
   const handleEdit = () => {
-    const newAssignee = prompt("Enter assignee:", task.assignee || "");
-    const newDue = prompt("Enter due date (YYYY-MM-DD):", task.due || "");
-    const updatedTask = { ...task, assignee: newAssignee, due: newDue };
-    updateTask(task.id, updatedTask);
+    const newAssignee = prompt("Enter assignee:", task.assignee);
+    const newDue = prompt("Enter due date (YYYY-MM-DD):", task.due);
+    updateTask(task.id, { ...task, assignee: newAssignee, due: newDue });
   };
 
   return (
-    <div className="bg-white text-black p-3 rounded-lg shadow mb-3">
-      <h4 className="font-semibold">{task.title}</h4>
+    <div className="task-card">
+      <h4>{task.title}</h4>
 
-      <p className="text-sm text-gray-600">
-        Assignee: {task.assignee || "—"} <br />
-        Due: {task.due || "—"}
-      </p>
+      <div className="task-details">
+        Deadline: {task.due || "—"} <br />
+        Assigned: {task.assignee || "—"}
+      </div>
+
+      <div className="comment-box">
+        <input placeholder="Add comment..." />
+      </div>
 
       {role === "owner" && (
-        <div className="mt-2 flex gap-2">
-          <button
-            onClick={handleEdit}
-            className="bg-blue-500 text-white px-2 py-1 rounded text-sm"
-          >
-            Edit
-          </button>
-
-          <button
-            onClick={() => deleteTask(task.id)}
-            className="bg-red-500 text-white px-2 py-1 rounded text-sm"
-          >
-            Delete
-          </button>
-
+        <>
           <select
+            className="status-select"
             value={task.status}
             onChange={(e) => changeTaskStatus(task.id, e.target.value)}
-            className="px-2 py-1 rounded text-sm"
           >
             <option>To Do</option>
             <option>In Progress</option>
             <option>Done</option>
           </select>
-        </div>
+
+          <div className="task-btn-row">
+            <button className="edit-btn" onClick={handleEdit}>Edit</button>
+            <button className="delete-btn" onClick={() => deleteTask(task.id)}>Delete</button>
+          </div>
+        </>
       )}
     </div>
   );
