@@ -39,9 +39,10 @@ function Board({ user, logout }) {
   return (
     <div className="board-container">
       <h1>Project 1</h1>
-      <p>Welcome, {user.username} ({user.role})</p>
+      <p>
+        Welcome, {user.username} ({user.role})
+      </p>
 
-      {/* Input Row */}
       <div className="task-input-row">
         <input
           placeholder="Task description"
@@ -86,14 +87,17 @@ function Board({ user, logout }) {
           changeTaskStatus={changeTaskStatus}
         />
 
-        {/* Notifications panel placeholder EXACT like screenshot */}
         <div className="notifications-panel">
           <h3>Notifications</h3>
+
           <div className="notification-item">
             Task moved to In Progress
             <button className="mark-read-btn">Mark read</button>
           </div>
-          <button className="logout-btn" onClick={logout}>Logout</button>
+
+          <button className="logout-btn" onClick={logout}>
+            Logout
+          </button>
         </div>
       </div>
     </div>
