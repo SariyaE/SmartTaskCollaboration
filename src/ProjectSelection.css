@@ -1,6 +1,3 @@
-/* ProjectSelection.css - dark purplish gradient theme, centered title and cards */
-
-/* Full-page background */
 .project-page {
   width: 100vw;
   min-height: 100vh;
@@ -11,132 +8,93 @@
   box-sizing: border-box;
 }
 
-/* Topbar */
 .project-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
   margin-bottom: 24px;
 }
 
-.project-topbar-left {
-  width: 120px;
-}
-
+.project-topbar-left,
 .project-topbar-right {
-  width: 120px;
-  display: flex;
-  justify-content: flex-end;
+  width: 140px;
 }
 
 .project-title {
-  margin: 0 auto;
   font-size: 44px;
   font-weight: 700;
   background: linear-gradient(90deg, #3ca2ff, #a066ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
+  margin: 0;
 }
 
-/* Logout button */
 .logout-btn {
   padding: 10px 16px;
   background: #2f9cff;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  box-shadow: 0 6px 18px rgba(50, 120, 200, 0.15);
 }
 
-/* Centered welcome area */
 .project-centered {
   text-align: center;
-  margin-top: 18px;
+  margin-bottom: 20px;
 }
 
 .welcome-text {
   font-size: 36px;
   font-weight: 700;
-  margin: 28px 0 6px;
-  color: #fff;
+  margin-bottom: 6px;
 }
 
 .select-text {
-  font-size: 26px;
-  font-weight: 600;
-  margin: 6px 0 26px;
+  font-size: 22px;
   opacity: 0.9;
+  margin-bottom: 20px;
 }
 
-/* Grid (horizontal scroll) */
 .project-grid {
   display: flex;
-  gap: 36px;
+  gap: 32px;
   justify-content: center;
-  align-items: flex-start;
-  flex-wrap: nowrap;
-  margin-top: 8px;
-  overflow-x: auto;
-  padding: 18px 8px;
-}
-
-.project-grid::-webkit-scrollbar {
-  height: 8px;
-}
-
-.project-grid::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-}
-
-/* Cards */
-.project-card {
-  background: rgba(255, 255, 255, 0.04);
-  padding: 28px;
-  width: 320px;
-  border-radius: 14px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(8px);
-  min-width: 320px;
-}
-
-.create-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.project-name {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 18px;
-}
-
-/* Buttons */
-.project-buttons {
-  display: flex;
-  gap: 12px;
   flex-wrap: wrap;
 }
 
+.project-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  padding: 24px;
+  width: 260px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.project-name {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.project-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .btn {
-  padding: 10px 14px;
+  padding: 10px;
   border: none;
   border-radius: 10px;
   font-weight: 700;
   cursor: pointer;
-  color: #fff;
-  min-width: 88px;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  color: white;
 }
 
-/* Colors */
 .blue {
   background: linear-gradient(90deg, #3ca2ff, #4e74ff);
 }
@@ -148,11 +106,4 @@
 
 .red {
   background: linear-gradient(90deg, #e04b4b, #d9534f);
-}
-
-/* Hover */
-.btn:hover {
-  transform: translateY(-2px);
-  transition: transform 0.12s ease;
-  opacity: 0.98;
 }
