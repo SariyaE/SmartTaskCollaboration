@@ -1,192 +1,75 @@
-/* ------------------ MAIN BOARD CONTAINER ------------------ */
-.board-container {
-  padding: 30px;
-  background: #1f2124;
-  min-height: 100vh;
-  color: white;
+.task-card {
+  background: #1e1f22;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(0,0,0,0.35);
 }
 
-/* Title + welcome */
-.board-container h1 {
-  font-size: 32px;
-  font-weight: 700;
-}
-
-.board-container p {
-  opacity: 0.8;
-}
-
-
-/* ------------------ INPUT ROW ------------------ */
-.task-input-row {
-  display: flex;
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.task-input-row input {
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: none;
-  background: #2b2d31;
-  color: white;
-  width: 220px;
-}
-
-.add-btn {
-  background: #0a7cff;
-  border: none;
-  padding: 10px 18px;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
+.task-title {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
   font-weight: 600;
 }
 
-.add-btn:hover {
-  opacity: 0.85;
-}
-
-
-/* ------------------ MAIN BOARD LAYOUT ------------------ */
-.board-main {
-  display: flex;
-  gap: 32px;
-  margin-top: 30px;
-  align-items: flex-start;
-}
-
-
-/* ------------------ COLUMNS ------------------ */
-.task-column {
-  flex: 1;
-  background: #2b2d31;
-  padding: 20px;
-  border-radius: 12px;
-  min-height: 480px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.45);
-}
-
-.task-column h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-
-
-/* ------------------ TASK CARD ------------------ */
-.task-card {
-  background: #3a3c40;
-  padding: 16px;
-  border-radius: 10px;
-  margin-bottom: 14px;
-  color: white;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-}
-
-.task-card h4 {
-  font-size: 17px;
-  margin-bottom: 6px;
-}
-
-.task-details {
-  margin-bottom: 10px;
-  font-size: 14px;
-  opacity: 0.9;
-}
-
-
-/* Comments */
-.comment-box input {
+.task-input,
+.comment-input {
   width: 100%;
-  background: #2b2d31;
-  border: none;
+  background: #2a2b2f;
+  color: #fff;
   padding: 8px;
   border-radius: 6px;
-  margin-top: 6px;
-  color: white;
+  border: 1px solid #444;
+  margin-bottom: 10px;
 }
 
-/* Status dropdown */
-.status-select {
-  width: 100%;
+.task-info {
+  color: #d5d5d5;
+  font-size: 0.9rem;
+}
+
+.comments-section {
   margin-top: 10px;
-  padding: 6px;
-  border: none;
-  background: #2b2d31;
-  color: white;
-  border-radius: 6px;
 }
 
+.comment-item {
+  color: #cfcfcf;
+  font-size: 0.85rem;
+  margin: 4px 0;
+}
 
-/* Buttons */
-.task-btn-row {
+.comment-btn {
+  background: #3d7bff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 5px;
+  color: #fff;
+}
+
+.task-actions {
+  margin-top: 12px;
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
 }
 
-.edit-btn {
-  background: #ffb02e;
+.edit-btn,
+.save-btn {
+  background: #3d7bff;
   border: none;
-  padding: 6px 12px;
+  padding: 7px 12px;
   border-radius: 6px;
-  color: black;
   cursor: pointer;
+  color: white;
 }
 
 .delete-btn {
-  background: #d22;
+  background: #cc3333;
   border: none;
-  padding: 6px 12px;
+  padding: 7px 12px;
   border-radius: 6px;
-  color: white;
   cursor: pointer;
-}
-
-
-/* ------------------ NOTIFICATIONS PANEL ------------------ */
-.notifications-panel {
-  width: 260px;
-  background: #2b2d31;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.45);
-}
-
-.notifications-panel h3 {
-  font-size: 20px;
-  margin-bottom: 14px;
-}
-
-.notification-item {
-  background: #3a3c40;
-  padding: 14px;
-  border-radius: 10px;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-.mark-read-btn {
-  margin-top: 8px;
-  background: #0a7cff;
-  width: 100%;
-  border: none;
   color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
-}
-
-.logout-btn {
-  margin-top: 20px;
-  width: 100%;
-  background: #0a7cff;
-  padding: 10px;
-  border: none;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.logout-btn:hover {
-  opacity: 0.85;
 }
