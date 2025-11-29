@@ -8,6 +8,31 @@ function Board({ user, logout }) {
   const [newDate, setNewDate] = useState("");
   const [notifications, setNotifications] = useState([]);
 
+  // Edit task
+const handleEditTask = (id, title, deadline, assignedTo) => {
+  setTasks(prev =>
+    prev.map(t =>
+      t.id === id ? { ...t, title, deadline, assignedTo } : t
+    )
+  );
+};
+
+// Delete task
+const handleDeleteTask = (id) => {
+  setTasks(prev => prev.filter(t => t.id !== id));
+};
+
+// Add comment
+const handleAddComment = (id, comment) => {
+  setTasks(prev =>
+    prev.map(t =>
+      t.id === id
+        ? { ...t, comments: [...(t.comments || []), comment] }
+        : t
+    )
+  );
+};
+  
   // ADD A NEW TASK
   const addTask = () => {
     if (!newTask.trim()) return;
@@ -167,3 +192,4 @@ function Board({ user, logout }) {
 }
 
 export default Board;
+
