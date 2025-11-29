@@ -1,56 +1,113 @@
-function Task({
-  task,
-  role,
-  deleteTask,
-  updateTask,
-  changeTaskStatus,
-  onDragStart,
-}) {
-  const handleEdit = () => {
-    const newTitle = prompt("Task name:", task.title);
-    const newAssignee = prompt("Assign to:", task.assignee);
-    const newDue = prompt("Due date (mm/dd/yyyy):", task.due);
+import React, { useState } from "react";
 
-    updateTask(task.id, {
-      ...task,
-      title: newTitle,
-      assignee: newAssignee,
-      due: newDue,
-    });
+export default function Task({
+  task,
+  column,
+  onMove,
+  onDelete,
+  onEdit,
+  onComment,
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(task.title);
+  const [editedDeadline, setEditedDeadline] = useState(task.deadline);
+  const [editedAssigned, setEditedAssigned] = useState(task.assignedTo || "");
+  const [commentText, setCommentText] = useState("");
+
+  // Save edit changes
+  const handleSave = () => {
+    onEdit(task.id, editedTitle, editedDeadline, editedAssigned);
+    setIsEditing(false);
+  };
+
+  // Submit comment
+  const handleCommentSubmit = () => {
+    if (!commentText.trim()) return;
+    onComment(task.id, commentText);
+    setCommentText("");
   };
 
   return (
     <div
       className="task-card"
       draggable
-      onDragStart={(e) => onDragStart(e, task.id)}
+      onDragStart={(e) => {
+        e.dataTransfer.setData("taskId", task.id);
+        e.dataTransfer.setData("fromColumn", column);
+      }}
     >
-      <h4>{task.title}</h4>
-
-      <div className="task-details">
-        Deadline: {task.due || "—"} <br />
-        Assigned: {task.assignee || "—"}
-      </div>
-
-      <div className="comment-box">
-        <input placeholder="Add comment..." />
-      </div>
-
-      {role === "owner" && (
+      {isEditing ? (
         <>
-          <select
-            className="status-select"
-            value={task.status}
-            onChange={(e) => changeTaskStatus(task.id, e.target.value)}
-          >
-            <option>To Do</option>
-            <option>In Progress</option>
-            <option>Done</option>
-          </select>
+          <input
+            className="task-input"
+            value={editedTitle}
+            onChange={(e) => setEditedTitle(e.target.value)}
+            placeholder="Task title"
+          />
 
-          <div className="task-btn-row">
-            <button className="edit-btn" onClick={handleEdit}>Edit</button>
-            <button className="delete-btn" onClick={() => deleteTask(task.id)}>
+          <input
+            className="task-input"
+            type="date"
+            value={editedDeadline}
+            onChange={(e) => setEditedDeadline(e.target.value)}
+          />
+
+          <input
+            className="task-input"
+            value={editedAssigned}
+            placeholder="Assigned to..."
+            onChange={(e) => setEditedAssigned(e.target.value)}
+          />
+
+          <button className="save-btn" onClick={handleSave}>
+            Save
+          </button>
+        </>
+      ) : (
+        <>
+          <h4 className="task-title">{task.title}</h4>
+
+          {task.deadline && (
+            <p className="task-info">
+              <strong>Deadline:</strong> {task.deadline}
+            </p>
+          )}
+
+          {task.assignedTo && (
+            <p className="task-info">
+              <strong>Assigned:</strong> {task.assignedTo}
+            </p>
+          )}
+
+          {/* Comments */}
+          <div className="comments-section">
+            <strong>Comments</strong>
+
+            {(task.comments || []).map((c, i) => (
+              <p key={i} className="comment-item">
+                • {c}
+              </p>
+            ))}
+
+            <input
+              className="comment-input"
+              placeholder="Add comment..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+            />
+
+            <button className="comment-btn" onClick={handleCommentSubmit}>
+              Submit
+            </button>
+          </div>
+
+          {/* Buttons */}
+          <div className="task-actions">
+            <button className="edit-btn" onClick={() => setIsEditing(true)}>
+              Edit
+            </button>
+
+            <button className="delete-btn" onClick={() => onDelete(task.id)}>
               Delete
             </button>
           </div>
@@ -59,5 +116,3 @@ function Task({
     </div>
   );
 }
-
-export default Task;
