@@ -1,12 +1,30 @@
-function Task({ task, role, deleteTask, updateTask, changeTaskStatus }) {
+function Task({
+  task,
+  role,
+  deleteTask,
+  updateTask,
+  changeTaskStatus,
+  onDragStart,
+}) {
   const handleEdit = () => {
-    const newAssignee = prompt("Enter assignee:", task.assignee);
-    const newDue = prompt("Enter due date (YYYY-MM-DD):", task.due);
-    updateTask(task.id, { ...task, assignee: newAssignee, due: newDue });
+    const newTitle = prompt("Task name:", task.title);
+    const newAssignee = prompt("Assign to:", task.assignee);
+    const newDue = prompt("Due date (mm/dd/yyyy):", task.due);
+
+    updateTask(task.id, {
+      ...task,
+      title: newTitle,
+      assignee: newAssignee,
+      due: newDue,
+    });
   };
 
   return (
-    <div className="task-card">
+    <div
+      className="task-card"
+      draggable
+      onDragStart={(e) => onDragStart(e, task.id)}
+    >
       <h4>{task.title}</h4>
 
       <div className="task-details">
@@ -32,7 +50,9 @@ function Task({ task, role, deleteTask, updateTask, changeTaskStatus }) {
 
           <div className="task-btn-row">
             <button className="edit-btn" onClick={handleEdit}>Edit</button>
-            <button className="delete-btn" onClick={() => deleteTask(task.id)}>Delete</button>
+            <button className="delete-btn" onClick={() => deleteTask(task.id)}>
+              Delete
+            </button>
           </div>
         </>
       )}
