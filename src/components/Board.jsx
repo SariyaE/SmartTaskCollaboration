@@ -206,6 +206,11 @@ export default function Board({
 
   return (
     <div className="board-page">
+      {/* TOP-LEFT BACK BUTTON */}
+      <button className="back-btn" onClick={() => window.history.back()}>
+        ← Back
+      </button>
+
       {/* TOP-RIGHT LOGOUT BUTTON */}
       <button className="logout-btn" onClick={handleLogoutClick}>
         Logout
