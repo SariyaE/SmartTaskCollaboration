@@ -1,243 +1,304 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import "../Board.css";
+import Task from "./Task";
 
 const initialColumns = {
   todo: {
+    key: "todo",
     title: "To Do",
-    tasks: []
+    tasks: [],
   },
   inProgress: {
+    key: "inProgress",
     title: "In Progress",
-    tasks: []
+    tasks: [
+      {
+        id: "example-1",
+        title: "Example Task",
+        deadline: "2025-10-31",
+        assignedTo: "Saviya",
+        comments: [],
+      },
+    ],
   },
   done: {
+    key: "done",
     title: "Done",
-    tasks: []
-  }
+    tasks: [],
+  },
 };
 
-export default function KanbanBoard() {
+const initialNotifications = [
+  {
+    id: 1,
+    message: "Task moved to In Progress",
+    time: "11/21/2023, 8:42:48 PM",
+    read: false,
+  },
+  {
+    id: 2,
+    message: "Task moved to In Progress",
+    time: "10/21/2025, 12:28:18 PM",
+    read: false,
+  },
+  {
+    id: 3,
+    message: "Task moved to In Progress",
+    time: "16/24/2025, 12:44:06 PM",
+    read: false,
+  },
+];
+
+const columnTitles = {
+  todo: "To Do",
+  inProgress: "In Progress",
+  done: "Done",
+};
+
+export default function Board({ projectName = "Project 1", userName = "admin", role = "owner", onLogout }) {
   const [columns, setColumns] = useState(initialColumns);
-  const [newTask, setNewTask] = useState("");
-  const [editingTask, setEditingTask] = useState(null);
-  const [commentInput, setCommentInput] = useState("");
+  const [newTitle, setNewTitle] = useState("");
+  const [newDeadline, setNewDeadline] = useState("");
+  const [notifications, setNotifications] = useState(initialNotifications);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   // ----------------------------
-  // ADD TASK
+  // ADD TASK (goes to "To Do")
   // ----------------------------
   const handleAddTask = () => {
-    if (!newTask.trim()) return;
+    if (!newTitle.trim()) return;
 
-    const newTaskObj = {
-      id: Date.now(),
-      title: newTask,
-      comments: []
+    const task = {
+      id: Date.now().toString(),
+      title: newTitle.trim(),
+      deadline: newDeadline || "",
+      assignedTo: "",
+      comments: [],
     };
 
-    setColumns(prev => ({
+    setColumns((prev) => ({
       ...prev,
       todo: {
         ...prev.todo,
-        tasks: [...prev.todo.tasks, newTaskObj]
-      }
+        tasks: [...prev.todo.tasks, task],
+      },
     }));
 
-    setNewTask("");
+    setNewTitle("");
+    setNewDeadline("");
   };
 
   // ----------------------------
   // DELETE TASK
   // ----------------------------
-  const handleDeleteTask = (colKey, taskId) => {
-    setColumns(prev => ({
+  const handleDeleteTask = (taskId, columnKey) => {
+    setColumns((prev) => ({
       ...prev,
-      [colKey]: {
-        ...prev[colKey],
-        tasks: prev[colKey].tasks.filter(task => task.id !== taskId)
-      }
+      [columnKey]: {
+        ...prev[columnKey],
+        tasks: prev[columnKey].tasks.filter((t) => t.id !== taskId),
+      },
     }));
   };
 
   // ----------------------------
   // EDIT TASK
   // ----------------------------
-  const handleEditTask = (colKey, taskId, newTitle) => {
-    setColumns(prev => ({
+  const handleEditTask = (
+    taskId,
+    title,
+    deadline,
+    assignedTo,
+    columnKey
+  ) => {
+    setColumns((prev) => ({
       ...prev,
-      [colKey]: {
-        ...prev[colKey],
-        tasks: prev[colKey].tasks.map(task =>
-          task.id === taskId ? { ...task, title: newTitle } : task
-        )
-      }
+      [columnKey]: {
+        ...prev[columnKey],
+        tasks: prev[columnKey].tasks.map((t) =>
+          t.id === taskId ? { ...t, title, deadline, assignedTo } : t
+        ),
+      },
     }));
-    setEditingTask(null);
   };
 
   // ----------------------------
   // ADD COMMENT
   // ----------------------------
-  const handleAddComment = (colKey, taskId) => {
-    if (!commentInput.trim()) return;
-
-    setColumns(prev => ({
+  const handleAddComment = (taskId, text, columnKey) => {
+    if (!text.trim()) return;
+    setColumns((prev) => ({
       ...prev,
-      [colKey]: {
-        ...prev[colKey],
-        tasks: prev[colKey].tasks.map(task =>
-          task.id === taskId
-            ? {
-                ...task,
-                comments: [...task.comments, commentInput]
-              }
-            : task
-        )
-      }
+      [columnKey]: {
+        ...prev[columnKey],
+        tasks: prev[columnKey].tasks.map((t) =>
+          t.id === taskId
+            ? { ...t, comments: [...(t.comments || []), text] }
+            : t
+        ),
+      },
     }));
-
-    setCommentInput("");
   };
 
   // ----------------------------
-  // DRAG AND DROP
+  // DRAG & DROP
   // ----------------------------
-  const handleDragStart = (e, task, fromColumn) => {
-    e.dataTransfer.setData("task", JSON.stringify({ task, fromColumn }));
-  };
+  const handleDragOver = (e) => e.preventDefault();
 
-  const handleDrop = (e, toColumn) => {
-    const { task, fromColumn } = JSON.parse(e.dataTransfer.getData("task"));
+  const handleDrop = (e, toColumnKey) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("taskId");
+    const fromColumnKey = e.dataTransfer.getData("fromColumn");
 
-    if (fromColumn === toColumn) return;
+    if (!taskId || !fromColumnKey || fromColumnKey === toColumnKey) return;
 
-    setColumns(prev => {
-      const newColumns = { ...prev };
-
-      // Remove from old column
-      newColumns[fromColumn].tasks = newColumns[fromColumn].tasks.filter(
-        t => t.id !== task.id
+    setColumns((prev) => {
+      const fromTasks = [...prev[fromColumnKey].tasks];
+      const taskIndex = fromTasks.findIndex(
+        (t) => String(t.id) === String(taskId)
       );
+      if (taskIndex === -1) return prev;
 
-      // Add to new column
-      newColumns[toColumn].tasks = [...newColumns[toColumn].tasks, task];
+      const [movedTask] = fromTasks.splice(taskIndex, 1);
+      const toTasks = [...prev[toColumnKey].tasks, movedTask];
 
-      return newColumns;
+      return {
+        ...prev,
+        [fromColumnKey]: { ...prev[fromColumnKey], tasks: fromTasks },
+        [toColumnKey]: { ...prev[toColumnKey], tasks: toTasks },
+      };
     });
+
+    // Add notification
+    setNotifications((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        message: `Task moved to ${columnTitles[toColumnKey]}`,
+        time: new Date().toLocaleString(),
+        read: false,
+      },
+    ]);
   };
 
-  const allowDrop = e => e.preventDefault();
+  // ----------------------------
+  // NOTIFICATIONS
+  // ----------------------------
+  const handleMarkRead = (id) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+    );
+  };
+
+  const handleLogoutClick = () => {
+    if (onLogout) {
+      onLogout();
+    } else {
+      // fallback so button still works without breaking anything
+      console.log("Logout clicked");
+    }
+  };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Smart Task Collaboration Board</h1>
+    <div className="board-page">
+      <div className="board-wrapper">
+        {/* MAIN BOARD */}
+        <div className="board-main">
+          <div className="board-header">
+            <h1>{projectName}</h1>
+            <p>
+              Welcome, {userName} ({role})
+            </p>
+          </div>
 
-      {/* Add Task */}
-      <div style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          placeholder="New task..."
-          value={newTask}
-          onChange={e => setNewTask(e.target.value)}
-        />
-        <button onClick={handleAddTask}>Add Task</button>
-      </div>
+          {/* INPUT ROW */}
+          <div className="task-input-row">
+            <input
+              className="top-input"
+              placeholder="Task description"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+            />
+            <input
+              className="top-input"
+              type="date"
+              value={newDeadline}
+              onChange={(e) => setNewDeadline(e.target.value)}
+              placeholder="mm / dd / yyyy"
+            />
+            <button className="add-btn" onClick={handleAddTask}>
+              Add
+            </button>
+          </div>
 
-      {/* Columns */}
-      <div style={{ display: "flex", gap: "20px" }}>
-        {Object.entries(columns).map(([key, column]) => (
-          <div
-            key={key}
-            onDrop={e => handleDrop(e, key)}
-            onDragOver={allowDrop}
-            style={{
-              width: "30%",
-              padding: "15px",
-              background: "#f5f5f5",
-              borderRadius: "8px"
-            }}
-          >
-            <h2>{column.title}</h2>
-
-            {/* Task Cards */}
-            {column.tasks.map(task => (
+          {/* COLUMNS */}
+          <div className="columns-row">
+            {["todo", "inProgress", "done"].map((key) => (
               <div
-                key={task.id}
-                draggable
-                onDragStart={e => handleDragStart(e, task, key)}
-                style={{
-                  marginBottom: "10px",
-                  padding: "10px",
-                  background: "white",
-                  borderRadius: "6px",
-                  border: "1px solid #ccc"
-                }}
+                key={key}
+                className="task-column"
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, key)}
               >
-                {/* Editing Task */}
-                {editingTask === task.id ? (
-                  <div>
-                    <input
-                      type="text"
-                      defaultValue={task.title}
-                      onKeyDown={e => {
-                        if (e.key === "Enter") {
-                          handleEditTask(key, task.id, e.target.value);
-                        }
-                      }}
-                    />
-                    <button
-                      onClick={() =>
-                        handleEditTask(key, task.id, task.title)
-                      }
-                    >
-                      Save
-                    </button>
-                  </div>
+                <h3 className="column-title">{columns[key].title}</h3>
+
+                {columns[key].tasks.length === 0 ? (
+                  <p className="empty-column"></p>
                 ) : (
-                  <>
-                    <strong>{task.title}</strong>
-                    <div style={{ marginTop: "5px" }}>
-                      <button onClick={() => setEditingTask(task.id)}>
-                        Edit
-                      </button>
-                      <button
-                        style={{ marginLeft: "10px", color: "red" }}
-                        onClick={() => handleDeleteTask(key, task.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </>
+                  columns[key].tasks.map((task) => (
+                    <Task
+                      key={task.id}
+                      task={task}
+                      column={key}
+                      onDelete={(id) => handleDeleteTask(id, key)}
+                      onEdit={(id, title, deadline, assignedTo) =>
+                        handleEditTask(id, title, deadline, assignedTo, key)
+                      }
+                      onComment={(id, text) => handleAddComment(id, text, key)}
+                    />
+                  ))
                 )}
-
-                {/* Comments */}
-                <div style={{ marginTop: "10px" }}>
-                  <h4>Comments</h4>
-                  {task.comments.map((c, i) => (
-                    <p
-                      key={i}
-                      style={{
-                        background: "#eee",
-                        padding: "5px",
-                        borderRadius: "4px"
-                      }}
-                    >
-                      {c}
-                    </p>
-                  ))}
-
-                  <input
-                    type="text"
-                    placeholder="Add a comment..."
-                    value={commentInput}
-                    onChange={e => setCommentInput(e.target.value)}
-                  />
-                  <button onClick={() => handleAddComment(key, task.id)}>
-                    Submit
-                  </button>
-                </div>
               </div>
             ))}
           </div>
-        ))}
+        </div>
+
+        {/* NOTIFICATIONS PANEL */}
+        <div className="notifications-panel">
+          <div className="notifications-header">
+            <h2>Notifications</h2>
+            {unreadCount > 0 && (
+              <span className="notification-badge">{unreadCount}</span>
+            )}
+          </div>
+
+          <div className="notifications-list">
+            {notifications.length === 0 ? (
+              <p className="empty-notifications">No notifications</p>
+            ) : (
+              notifications.map((n) => (
+                <div key={n.id} className="notification-card">
+                  <p className="notification-title">{n.message}</p>
+                  <p className="notification-time">{n.time}</p>
+                  <div className="notification-footer">
+                    <div className="notification-placeholder" />
+                    <button
+                      className="mark-read-btn"
+                      onClick={() => handleMarkRead(n.id)}
+                    >
+                      Mark read
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          <button className="logout-btn" onClick={handleLogoutClick}>
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );
