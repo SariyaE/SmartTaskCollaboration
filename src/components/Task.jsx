@@ -1,26 +1,24 @@
 import React, { useState } from "react";
+import "../Board.css";
 
 export default function Task({
   task,
   column,
-  onMove,
   onDelete,
   onEdit,
   onComment,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
-  const [editedDeadline, setEditedDeadline] = useState(task.deadline);
+  const [editedDeadline, setEditedDeadline] = useState(task.deadline || "");
   const [editedAssigned, setEditedAssigned] = useState(task.assignedTo || "");
   const [commentText, setCommentText] = useState("");
 
-  // Save edit changes
   const handleSave = () => {
     onEdit(task.id, editedTitle, editedDeadline, editedAssigned);
     setIsEditing(false);
   };
 
-  // Submit comment
   const handleCommentSubmit = () => {
     if (!commentText.trim()) return;
     onComment(task.id, commentText);
@@ -79,7 +77,6 @@ export default function Task({
             </p>
           )}
 
-          {/* Comments */}
           <div className="comments-section">
             <strong>Comments</strong>
 
@@ -101,7 +98,6 @@ export default function Task({
             </button>
           </div>
 
-          {/* Buttons */}
           <div className="task-actions">
             <button className="edit-btn" onClick={() => setIsEditing(true)}>
               Edit
