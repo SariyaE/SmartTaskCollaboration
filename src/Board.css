@@ -304,3 +304,23 @@
 .delete-btn:hover {
   opacity: 0.9;
 }
+
+/* TOP LEFT BACK BUTTON */
+.back-btn {
+  position: absolute;
+  top: 24px;
+  left: 40px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #cc3333; /* red */
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.back-btn:hover {
+  opacity: 0.9;
+}
