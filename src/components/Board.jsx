@@ -55,7 +55,12 @@ const columnTitles = {
   done: "Done",
 };
 
-export default function Board({ projectName = "Project 1", userName = "admin", role = "owner", onLogout }) {
+export default function Board({
+  projectName = "Project 1",
+  userName = "admin",
+  role = "owner",
+  onLogout,
+}) {
   const [columns, setColumns] = useState(initialColumns);
   const [newTitle, setNewTitle] = useState("");
   const [newDeadline, setNewDeadline] = useState("");
@@ -195,13 +200,17 @@ export default function Board({ projectName = "Project 1", userName = "admin", r
     if (onLogout) {
       onLogout();
     } else {
-      // fallback so button still works without breaking anything
       console.log("Logout clicked");
     }
   };
 
   return (
     <div className="board-page">
+      {/* TOP-RIGHT LOGOUT BUTTON */}
+      <button className="logout-btn" onClick={handleLogoutClick}>
+        Logout
+      </button>
+
       <div className="board-wrapper">
         {/* MAIN BOARD */}
         <div className="board-main">
@@ -294,10 +303,6 @@ export default function Board({ projectName = "Project 1", userName = "admin", r
               ))
             )}
           </div>
-
-          <button className="logout-btn" onClick={handleLogoutClick}>
-            Logout
-          </button>
         </div>
       </div>
     </div>
